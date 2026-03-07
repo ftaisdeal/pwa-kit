@@ -1,0 +1,45 @@
+User-agent: *
+Allow: /
+
+# Block development and build directories
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: /tests/
+Disallow: /test-results/
+Disallow: /playwright-report/
+Disallow: /coverage/
+Disallow: /cert/
+Disallow: /.git/
+Disallow: /.vscode/
+Disallow: /.idea/
+
+# Block config and build files
+Disallow: /vite.config.js
+Disallow: /tsconfig.json
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /.eslintrc*
+Disallow: /.prettierrc*
+Disallow: /playwright.config.js
+Disallow: /vitest.config.js
+
+# Block temporary and log files
+Disallow: /tmp/
+Disallow: /temp/
+Disallow: /*.log
+Disallow: /lighthouse-report.html
+Disallow: /stats.html
+
+# Allow important PWA files
+Allow: /manifest.webmanifest
+Allow: /sw.js
+Allow: /offline.html
+Allow: /favicon*
+Allow: /apple-touch-icon*
+Allow: /img/
+
+# Sitemap location
+Sitemap: https://yoursite.com/sitemap.xml
+
+# Crawl-delay for being respectful to servers
+Crawl-delay: 1

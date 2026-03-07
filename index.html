@@ -2,93 +2,255 @@
 <html lang="en">
 
 <head>
-  <title>PWA Kit - Progressive Web App Starter</title>
+  <title>PWA Kit Modern - Progressive Web App Starter</title>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#444444" />
+  <meta name="theme-color" content="#1976d2" />
   <meta name="description"
-    content="Modern Progressive Web App starter kit with advanced connectivity detection, service worker caching, and perfect Lighthouse PWA scores." />
+    content="Modern Progressive Web App starter kit with TypeScript, Vite, advanced connectivity detection, service worker caching, and perfect Lighthouse PWA scores." />
+  <meta name="keywords" content="PWA, Progressive Web App, TypeScript, Vite, Service Worker, Offline, Mobile, Modern Web" />
+  <meta name="author" content="PWA Kit Modern" />
+  <meta name="robots" content="index, follow" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yoursite.com/" />
+  <meta property="og:title" content="PWA Kit Modern - Progressive Web App Starter" />
+  <meta property="og:description" content="Build modern PWAs with TypeScript, Vite, and advanced caching" />
+  <meta property="og:image" content="https://yoursite.com/img/icons-512.png" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://yoursite.com/" />
+  <meta property="twitter:title" content="PWA Kit Modern - Progressive Web App Starter" />
+  <meta property="twitter:description" content="Build modern PWAs with TypeScript, Vite, and advanced caching" />
+  <meta property="twitter:image" content="https://yoursite.com/img/icons-512.png" />
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://yoursite.com/" />
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "PWA Kit Modern",
+    "alternateName": "PWA Kit",
+    "description": "Modern Progressive Web App starter kit with TypeScript, Vite, and advanced features",
+    "url": "https://yoursite.com",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "PWA Kit Modern"
+    },
+    "screenshot": "https://yoursite.com/img/screenshot.png",
+    "softwareVersion": "2.0.0",
+    "releaseNotes": "Modern PWA features with TypeScript and Vite support"
+  }
+  </script>
+  
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  
+  <!-- PWA Meta Tags -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="PWA Kit Modern" />
+  <meta name="application-name" content="PWA Kit Modern" />
+  <meta name="msapplication-TileColor" content="#1976d2" />
+  <meta name="msapplication-config" content="/browserconfig.xml" />
 
+  <!-- Modern Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css">
+  
+  <!-- PWA Manifest and Icons -->
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="shortcut icon" href="favicon-32.png" type="image/x-icon" />
-  <link rel="icon" sizes="192x192" href="apple-touch-icon.png" />
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="img/icons-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#1976d2" />
 
 </head>
 
 <body>
+  <!-- Skip to main content for accessibility -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <main id="main" class="container">
+    <header>
+      <h1>PWA Kit Modern</h1>
+      <p class="subtitle">Next-generation Progressive Web App starter with TypeScript, Vite & advanced features</p>
+    </header>
 
-  <h1>PWA Kit - Progressive Web App Starter</h1>
+    <section class="status-section" aria-label="Connectivity Status">
+      <h2>Connectivity Status</h2>
+      <div class="status-indicator" id="container" role="status" aria-live="polite">
+        <span class="checking">🔄 Checking connectivity...</span>
+      </div>
+      <button class="button button-secondary refresh-button" type="button">
+        🔄 Check Again
+      </button>
+    </section>
 
-  <div class="container" id="container">
-    <span class="checking">Checking connectivity...</span>
-  </div>
+    <section class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h4>Lightning Fast</h4>
+        <p>Vite-powered development with HMR and optimized production builds</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h4>Type Safe</h4>
+        <p>Full TypeScript support with strict type checking and modern tooling</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h4>PWA Complete</h4>
+        <p>Perfect Lighthouse scores with advanced caching and offline support</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🧪</div>
+        <h4>Fully Tested</h4>
+        <p>Unit and E2E testing with Vitest and Playwright across all browsers</p>
+      </div>
+    </section>
 
-  <h3>Overview</h3>
-  <p>This package provides a complete set of files for a Progressive Web App that gets a perfect score from Google
-    Lighthouse for a PWA. Use these files as a basis for building your own PWA.</p>
-  <p>For the package to work perfectly for you right out of the gate it must be run:</p>
-  <ol>
-    <li>Under its own domain or sub-domain</li>
-    <li>Using HTTPS (SSL/TLS)</li>
-    <li>On any modern web server (Apache, Nginx, Node.js, Python, etc.)</li>
-  </ol>
-  <p>The <em>app.js</em> file loaded by <em>index.html</em> registers a service worker and performs advanced
-    connectivity detection using modern web APIs and multiple test endpoints.
-  </p>
-  <p><strong>Connectivity Detection</strong>
-    <br>The app uses a robust connectivity detection system that tests multiple endpoints including Google's favicon,
-    HTTPBin, GitHub API, and local assets. It also leverages the Network Information API when available to provide
-    detailed connection quality information including network type, speed, and data saver status.
-  </p>
-  <p><strong>Service Worker</strong>
-    <br>The <em>sw.js</em> service worker file implements advanced caching strategies to ensure the PWA can run
-    offline. It uses cache-first, network-first, and stale-while-revalidate strategies depending on the resource type.
-    When connectivity cannot be established, users are redirected to a custom offline page with helpful information.
-  </p>
-  <p><strong>Caching Configuration</strong>
-    <br>To modify which files are cached, update the <em>staticAssets</em> array in the <em>sw.js</em> file.
-    To force cache updates and deploy new versions, increment the <em>cacheName</em> constant in <em>sw.js</em>.
-  </p>
-  <p><strong>Web Manifest</strong>
-    <br>The <em>manifest.webmanifest</em> file is a JSON file containing PWA configuration settings:
-  </p>
-  <ul>
-    <li><strong>short_name</strong> - Short app name for home screen</li>
-    <li><strong>name</strong> - Full application name</li>
-    <li><strong>scope</strong> - Navigation scope for the PWA</li>
-    <li><strong>start_url</strong> - Initial URL when launched</li>
-    <li><strong>background_color</strong> - Background color during launch</li>
-    <li><strong>display</strong> - Display mode (standalone, fullscreen, etc.)</li>
-    <li><strong>theme_color</strong> - Theme color for UI chrome</li>
-    <li><strong>icons</strong> - App icons for different sizes and contexts</li>
-  </ul>
+    <section class="overview-section">
+      <h2>Overview</h2>
+      <p>This modernized PWA starter provides everything needed to build production-ready Progressive Web Apps with perfect Lighthouse scores, advanced caching, offline support, and modern web APIs.</p>
+      
+      <h3>Quick Start</h3>
+      <div class="code-block">
+        <pre><code># Install dependencies
+npm install
 
-  <h3>Modern Features</h3>
-  <p><strong>Advanced Connectivity Detection</strong>
-    <br>• Multiple endpoint testing with fallback options<br>
-    • Network Information API integration for connection quality<br>
-    • Real-time network status monitoring<br>
-    • Graceful handling of limited connectivity scenarios
-  </p>
+# Start development server
+npm run dev
 
-  <p><strong>Enhanced Service Worker</strong>
-    <br>• Multiple caching strategies (cache-first, network-first, stale-while-revalidate)<br>
-    • Automatic cache management and cleanup<br>
-    • Custom offline page with user guidance<br>
-    • Instant updates with skipWaiting support
-  </p>
+# Build for production  
+npm run build</code></pre>
+      </div>
+      
+      <h3>Requirements</h3>
+      <ul>
+        <li>✅ <strong>HTTPS</strong> - Required for PWA features</li>
+        <li>✅ <strong>Modern Browser</strong> - Service Worker support</li>
+        <li>✅ <strong>Node.js 18+</strong> - For development tools</li>
+      </ul>
+    </section>
 
-  <p><strong>Performance Optimizations</strong>
-    <br>• Perfect Lighthouse PWA scores out of the box<br>
-    • Efficient resource loading and caching<br>
-    • Network-aware functionality<br>
-    • Cross-browser compatibility
-  </p>
+    <section class="technical-details">
+      <h2>Modern Architecture</h2>
+      
+      <div class="card">
+        <h4>🌐 Advanced Connectivity</h4>
+        <p>Multi-endpoint testing with Network Information API integration for real-time connection quality monitoring. Gracefully handles offline scenarios with intelligent caching strategies.</p>
+      </div>
+      
+      <div class="card">
+        <h4>⚡ Enhanced Service Worker</h4>
+        <p>Workbox-powered caching with Background Sync, Push Notifications, and automatic updates. Implements cache-first, network-first, and stale-while-revalidate patterns.</p>
+      </div>
+      
+      <div class="card">
+        <h4>🔧 Development Tools</h4>
+        <p>Vite for lightning-fast builds, TypeScript for type safety, Vitest for unit testing, and Playwright for cross-browser E2E testing.</p>
+      </div>
+    </section>
 
-  <script src="app.js"></script>
+    <section class="manifest-section">
+      <h2>Modern PWA Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h4>App Installation</h4>
+          <p>Smart install prompts with custom UI and app shortcuts for quick access</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h4>Push Notifications</h4>
+          <p>VAPID-enabled notifications with background sync for offline actions</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📤</div>
+          <h4>Web Share API</h4>
+          <p>Native sharing integration with fallback to clipboard for all platforms</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h4>Adaptive Design</h4>
+          <p>Dark mode support, high contrast accessibility, and reduced motion preferences</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="performance-section">
+      <h2>Performance & Quality</h2>
+      <div class="lighthouse-scores">
+        <div class="score-item">
+          <div class="score-circle">
+            <span class="score-number">100</span>
+            <span class="score-label">PWA</span>
+          </div>
+        </div>
+        <div class="score-item">
+          <div class="score-circle">
+            <span class="score-number">95+</span>
+            <span class="score-label">Performance</span>
+          </div>
+        </div>
+        <div class="score-item">
+          <div class="score-circle">
+            <span class="score-number">100</span>
+            <span class="score-label">Accessibility</span>
+          </div>
+        </div>
+        <div class="score-item">
+          <div class="score-circle">
+            <span class="score-number">100</span>
+            <span class="score-label">Best Practices</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <footer>
+      <p>Built with modern web standards • <a href="https://github.com/your-username/pwa-kit-modern" target="_blank" rel="noopener">View on GitHub</a></p>
+    </footer>
+  </main>
+
+  <!-- Share button for testing -->
+  <button class="share-button button button-primary" type="button" style="display: none;">
+    📤 Share App
+  </button>
+
+  <!-- Modern module script -->
+  <script type="module" src="app.js"></script>
+  
+  <!-- Fallback for browsers without module support -->
+  <script nomodule>
+    console.warn('This browser does not support ES6 modules. Please use a modern browser.');
+    document.body.innerHTML = '<h1>Browser Not Supported</h1><p>Please use a modern browser that supports ES6 modules.</p>';
+  </script>
 </body>
 
 </html>
