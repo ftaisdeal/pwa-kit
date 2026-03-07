@@ -140,6 +140,36 @@ VitePWA({
 })
 ```
 
+### Icons & Assets
+The starter includes minimal placeholder icons. **You should generate your own branded icons** for production:
+
+**Current Icons (replace with your own):**
+- `favicon-32.png` - Browser favicon
+- `apple-touch-icon.png` - iOS home screen icon  
+- `img/icons-192.png` - Android home screen icon
+- `img/icons-512.png` - PWA splash screen icon
+
+**Recommended Icon Generation Tools:**
+- [PWA Builder](https://www.pwabuilder.com/) - Complete PWA asset generation
+- [RealFaviconGenerator](https://realfavicongenerator.net/) - Cross-platform favicon generator
+- [App Icon Generator](https://appicon.co/) - Generate all sizes from one image
+
+**Full Icon Set Needed for Production:**
+```bash
+# Essential PWA icons
+/favicon-32.png          # 32×32 browser favicon
+/apple-touch-icon.png    # 180×180 iOS icon
+/img/icons-192.png       # 192×192 Android icon
+/img/icons-512.png       # 512×512 splash screen
+/img/icons-512-maskable.png # 512×512 maskable (safe area)
+
+# Optional but recommended
+/img/icons-72.png        # 72×72 small devices
+/img/icons-96.png        # 96×96 desktop PWA
+/img/icons-144.png       # 144×144 Windows tiles
+/img/safari-pinned-tab.svg # Safari pinned tab
+```
+
 ### Environment Variables
 Create `.env` files for different environments:
 ```bash
