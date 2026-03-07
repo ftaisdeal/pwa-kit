@@ -33,19 +33,19 @@
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/utils/*": ["./src/utils/*"],
-      "@/types/*": ["./src/types/*"]
+      "@/*": ["./*"],
+      "@/public/*": ["./public/*"],
+      "@/types/*": ["./types/*"]
     }
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.js",
-    "src/**/*.vue",
-    "tests/**/*.ts",
+    "*.ts",
+    "*.js", 
+    "public/**/*.ts",
+    "public/**/*.js",
     "vite.config.*",
-    "vitest.config.*"
+    "vitest.config.*",
+    "playwright.config.*"
   ],
   "exclude": [
     "node_modules",
