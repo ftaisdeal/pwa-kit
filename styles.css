@@ -23,9 +23,9 @@
   --surface-color-dark: #1e1e1e;
   
   /* Text Colors */
-  --text-primary: #212121;
-  --text-secondary: #424242;
-  --text-disabled: #757575;
+  --text-primary: #000000;
+  --text-secondary: #1a1a1a;
+  --text-disabled: #404040;
   --text-primary-dark: #ffffff;
   --text-secondary-dark: #e0e0e0;
   
@@ -82,11 +82,11 @@
     --surface-color: var(--surface-color-dark);
     --text-primary: var(--text-primary-dark);
     --text-secondary: var(--text-secondary-dark);
-    --text-disabled: #757575;
+    --text-disabled: #cccccc;
   }
   
   .green {
-    color: #81c784;
+    color: #a5d6a7;
     background: color-mix(in srgb, #4caf50 20%, transparent);
     border-color: color-mix(in srgb, #4caf50 50%, transparent);
   }
@@ -194,7 +194,7 @@ p {
 }
 
 .green {
-  color: #2e7d32;
+  color: #1b5e20;
   background: color-mix(in srgb, var(--success-color) 15%, transparent);
   border-color: color-mix(in srgb, var(--success-color) 40%, transparent);
 }
@@ -267,7 +267,7 @@ a {
     color: var(--primary-light);
     
     &:hover {
-      color: #90caf9;
+      color: #bbdefb;
     }
   }
 }
