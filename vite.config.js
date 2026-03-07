@@ -12,6 +12,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,txt,woff2,xml}'],
+        skipWaiting: false, // Prevent immediate activation in dev
+        clientsClaim: false, // Don't claim clients immediately
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
@@ -73,7 +75,7 @@ export default defineConfig({
         ]
       },
       devOptions: {
-        enabled: true // Enable PWA in development
+        enabled: false // Disable PWA in development to prevent constant reloading
       }
     })
   ],
@@ -97,9 +99,17 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
-    https: {
-      key: './cert/key.pem',
-      cert: './cert/cert.pem'
+    // Temporarily disable HTTPS to avoid certificate issues in development
+    // https: {
+    //   key: './cert/key.pem',
+    //   cert: './cert/cert.pem'
+    // }
+    hmr: {
+      overlay: false
+    },
+    watch: {
+      usePolling: false,
+      interval: 1000
     }
   },
   preview: {
