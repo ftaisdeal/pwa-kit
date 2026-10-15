@@ -1,11 +1,12 @@
 import { trackEvent } from './ui';
+import { log } from './logger';
 
 let installPrompt: BeforeInstallPromptEvent | null = null;
 
 export function setupInstallation(): void {
   // Install prompt handling
   window.addEventListener('beforeinstallprompt', (event) => {
-    console.log('Install prompt available');
+    log.debug('Install prompt available');
     event.preventDefault();
     installPrompt = event;
     showInstallButton();
@@ -13,7 +14,7 @@ export function setupInstallation(): void {
 
   // Track installation
   window.addEventListener('appinstalled', () => {
-    console.log('App installed successfully');
+    log.debug('App installed successfully');
     trackEvent('pwa_installed');
     hideInstallButton();
   });
@@ -36,7 +37,7 @@ async function installApp(): Promise<void> {
   if (installPrompt) {
     await installPrompt.prompt();
     const result = await installPrompt.userChoice;
-    console.log('Install prompt result:', result);
+    log.debug('Install prompt result:', result);
 
     if (result.outcome === 'accepted') {
       trackEvent('pwa_install_accepted');

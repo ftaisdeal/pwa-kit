@@ -1,13 +1,14 @@
 import { getDb, storeOfflineAction, type OfflineAction } from './db';
 import { isOnline } from './network';
 import { showInAppNotification } from './ui';
+import { log } from './logger';
 
 export function setupBackgroundSync(): void {
   if (
     'serviceWorker' in navigator &&
     'sync' in window.ServiceWorkerRegistration.prototype
   ) {
-    console.log('Background Sync available');
+    log.debug('Background Sync available');
 
     // Queue actions for background sync when offline
     document.addEventListener('submit', (event) => {
@@ -40,7 +41,7 @@ async function queueForBackgroundSync(form: HTMLFormElement): Promise<void> {
         await registration.sync?.register('connectivity-check');
       }
     } catch (error) {
-      console.warn('Background sync registration failed:', error);
+      log.warn('Background sync registration failed:', error);
     }
   }
 
@@ -59,11 +60,11 @@ export async function syncOfflineActions(): Promise<void> {
         await processOfflineAction(action);
         await db.delete('offline-actions', action.id as number);
       } catch (error) {
-        console.error('Failed to sync action:', action, error);
+        log.error('Failed to sync action:', action, error);
       }
     }
   } catch (error) {
-    console.error('Offline sync failed:', error);
+    log.error('Offline sync failed:', error);
   }
 }
 
@@ -77,6 +78,6 @@ async function processOfflineAction(action: OfflineAction): Promise<void> {
       });
       break;
     default:
-      console.warn('Unknown action type:', action.type);
+      log.warn('Unknown action type:', action.type);
   }
 }

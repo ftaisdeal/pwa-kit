@@ -1,70 +1,66 @@
 import { Workbox } from 'workbox-window';
 import { handleConnectivityRestored } from './network';
-import { showInAppNotification } from './ui';
+import { showUpdatePrompt } from './ui';
+import { log } from './logger';
 
-let wb: Workbox | null = null;
-
+// Update flow: a new service worker installs in the background and waits.
+// We ask the user before activating it, and only reload the page once they
+// have accepted, so an update never discards what they are doing.
 export async function setupServiceWorker(): Promise<void> {
-  if ('serviceWorker' in navigator) {
-    try {
-      // Skip service worker in development mode when PWA is disabled
-      if (import.meta.env.DEV) {
-        console.log('Service Worker skipped (development mode)');
-        return;
-      }
+  if (!('serviceWorker' in navigator)) return;
 
-      // Check if service worker file exists (for production builds)
-      const swResponse = await fetch('/sw.js', { method: 'HEAD' }).catch(
-        () => ({ ok: false })
-      );
+  // Skip service worker in development mode when PWA is disabled
+  if (import.meta.env.DEV) {
+    log.debug('Service Worker skipped (development mode)');
+    return;
+  }
 
-      if (!swResponse.ok) {
-        console.log('Service Worker not available');
-        return;
-      }
+  try {
+    const wb = new Workbox('/sw.js');
+    let reloadRequested = false;
 
-      wb = new Workbox('/sw.js');
-
-      // Listen for service worker events
-      wb.addEventListener('installed', (event) => {
-        console.log('Service Worker installed:', event);
+    wb.addEventListener('waiting', () => {
+      showUpdatePrompt(() => {
+        reloadRequested = true;
+        wb.messageSkipWaiting();
       });
+    });
 
-      wb.addEventListener('waiting', (event) => {
-        console.log('Service Worker waiting:', event);
-        showUpdateAvailableNotification();
-      });
-
-      wb.addEventListener('controlling', (event) => {
-        console.log('Service Worker controlling:', event);
+    // The new worker took over; reload so the page uses its assets
+    wb.addEventListener('controlling', () => {
+      if (reloadRequested) {
         window.location.reload();
-      });
-
-      wb.addEventListener('activated', (event) => {
-        console.log('Service Worker activated:', event);
-      });
-
-      // Listen for messages from service worker
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        handleServiceWorkerMessage(event.data);
-      });
-
-      // Register the service worker
-      const registration = await wb.register();
-      console.log('Service Worker registered:', registration?.scope);
-
-      // Setup periodic sync if supported
-      if (registration && 'periodicSync' in registration) {
-        await registration.periodicSync?.register('content-sync', {
-          minInterval: 24 * 60 * 60 * 1000, // 24 hours
-        });
       }
-    } catch (error) {
-      console.warn(
-        'Service Worker registration failed (expected in development):',
-        (error as Error).message
-      );
-    }
+    });
+
+    // Listen for messages from service worker
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      handleServiceWorkerMessage(event.data);
+    });
+
+    const registration = await wb.register();
+    log.debug('Service Worker registered:', registration?.scope);
+  } catch (error) {
+    log.warn(
+      'Service Worker registration failed (expected in development):',
+      (error as Error).message
+    );
+    return;
+  }
+
+  await registerPeriodicSync();
+}
+
+// Periodic sync is Chromium-only and needs a permission, so it must not
+// affect service worker registration when it is unavailable or denied.
+async function registerPeriodicSync(): Promise<void> {
+  try {
+    const registration = await navigator.serviceWorker.ready;
+    await registration.periodicSync?.register('content-sync', {
+      minInterval: 24 * 60 * 60 * 1000, // 24 hours
+    });
+  } catch (error) {
+    log.debug('Periodic sync unavailable:', (error as Error).message);
   }
 }
 
@@ -76,32 +72,12 @@ interface ServiceWorkerMessage {
 function handleServiceWorkerMessage(message: ServiceWorkerMessage): void {
   switch (message.type) {
     case 'SW_UPDATED':
-      console.log('Service Worker updated to version:', message.version);
+      log.debug('Service Worker updated to version:', message.version);
       break;
     case 'CONNECTIVITY_RESTORED':
       handleConnectivityRestored();
       break;
     default:
-      console.log('Unknown message from Service Worker:', message);
-  }
-}
-
-function showUpdateAvailableNotification(): void {
-  if ('Notification' in window && Notification.permission === 'granted') {
-    const notification = new Notification('App Update Available', {
-      body: 'A new version of the app is ready. Refresh to update.',
-      icon: '/img/icons-192.png',
-      tag: 'app-update',
-    });
-
-    notification.onclick = () => {
-      window.location.reload();
-    };
-  } else {
-    // Fallback UI notification
-    showInAppNotification(
-      'Update Available',
-      'Refresh to get the latest version'
-    );
+      log.debug('Unknown message from Service Worker:', message);
   }
 }

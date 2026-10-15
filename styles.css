@@ -369,6 +369,28 @@ a {
   }
 }
 
+/* Service worker update prompt */
+.update-prompt {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  left: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  background: var(--surface-color);
+  color: var(--text-primary);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 20%, transparent);
+  z-index: 1001;
+  animation: slideInRight 0.3s ease-out;
+
+  & p {
+    margin: 0;
+  }
+}
+
 @keyframes slideInRight {
   from {
     opacity: 0;
@@ -467,12 +489,20 @@ a {
     left: var(--spacing-sm);
     max-width: none;
   }
+
+  .update-prompt {
+    right: var(--spacing-sm);
+    bottom: var(--spacing-sm);
+    left: var(--spacing-sm);
+    flex-wrap: wrap;
+  }
 }
 
 /* Print Styles */
 @media print {
   .install-button,
-  .in-app-notification {
+  .in-app-notification,
+  .update-prompt {
     display: none;
   }
   

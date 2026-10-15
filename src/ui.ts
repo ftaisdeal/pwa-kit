@@ -1,3 +1,4 @@
+import { log } from './logger';
 export function showInAppNotification(title: string, body: string): void {
   const notification = document.createElement('div');
   notification.className = 'in-app-notification';
@@ -13,11 +14,43 @@ export function showInAppNotification(title: string, body: string): void {
   }, 3000);
 }
 
+// Asks the user to apply a waiting service worker update. `onReload` runs
+// when they accept; "Later" dismisses the prompt until the next visit.
+export function showUpdatePrompt(onReload: () => void): void {
+  if (document.querySelector('.update-prompt')) return;
+
+  const prompt = document.createElement('div');
+  prompt.className = 'update-prompt';
+  prompt.setAttribute('role', 'status');
+
+  const message = document.createElement('p');
+  message.textContent = 'A new version is available.';
+
+  const reload = document.createElement('button');
+  reload.type = 'button';
+  reload.className = 'button button-primary';
+  reload.textContent = 'Reload';
+  reload.addEventListener('click', () => {
+    reload.disabled = true;
+    onReload();
+  });
+
+  const later = document.createElement('button');
+  later.type = 'button';
+  later.className = 'button button-secondary';
+  later.textContent = 'Later';
+  later.addEventListener('click', () => prompt.remove());
+
+  prompt.append(message, reload, later);
+  document.body.appendChild(prompt);
+  reload.focus();
+}
+
 export function trackEvent(
   eventName: string,
   properties: Record<string, unknown> = {}
 ): void {
-  console.log('Event tracked:', eventName, properties);
+  log.debug('Event tracked:', eventName, properties);
   // Integrate with your analytics service
 }
 

@@ -12,11 +12,11 @@ export default defineConfig({
     siteUrl(),
     securityHeaders(),
     VitePWA({
-      registerType: 'autoUpdate',
+      // Registration and the update prompt are handled in src/sw.ts
+      registerType: 'prompt',
+      injectRegister: false,
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,txt,xml}'],
-        skipWaiting: false, // Prevent immediate activation in dev
-        clientsClaim: false, // Don't claim clients immediately
         runtimeCaching: [
           {
             // Self-hosted fonts (see @fontsource-variable/inter). Not precached,
@@ -76,12 +76,7 @@ export default defineConfig({
   ],
   build: {
     target: 'baseline-widely-available',
-    sourcemap: true,
-    rolldownOptions: {
-      output: {
-        minify: { compress: { dropConsole: true } }
-      }
-    }
+    sourcemap: true
   },
   server: {
     host: true,

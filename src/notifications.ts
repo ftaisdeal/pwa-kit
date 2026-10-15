@@ -1,12 +1,13 @@
 import { setupPushNotifications } from './push';
 import { showInAppNotification } from './ui';
+import { log } from './logger';
 
 // Initialize notification infrastructure without requesting permission
 export function initNotifications(): void {
   if ('Notification' in window) {
     // Check current permission status
     const { permission } = Notification;
-    console.log('Current notification permission:', permission);
+    log.debug('Current notification permission:', permission);
 
     // Show/hide notification button based on permission status
     updateNotificationUI(permission);
@@ -25,7 +26,7 @@ export async function requestNotificationPermission(): Promise<
   if ('Notification' in window) {
     try {
       const permission = await Notification.requestPermission();
-      console.log('Notification permission granted:', permission);
+      log.debug('Notification permission granted:', permission);
 
       // Update UI based on permission
       updateNotificationUI(permission);
@@ -51,7 +52,7 @@ export async function requestNotificationPermission(): Promise<
 
       return permission;
     } catch (error) {
-      console.warn('Notification permission request failed:', error);
+      log.warn('Notification permission request failed:', error);
       showInAppNotification(
         'Permission Error',
         'Unable to request notification permission'
@@ -115,9 +116,9 @@ function sendTestNotification(): void {
         notification.close();
       }, 4000);
 
-      console.log('Test notification sent successfully');
+      log.debug('Test notification sent successfully');
     } catch (error) {
-      console.warn('Test notification failed:', error);
+      log.warn('Test notification failed:', error);
     }
   }
 }

@@ -114,7 +114,8 @@ pwa-kit/
 │   ├── push.ts            # Push subscription
 │   ├── sync.ts            # Background sync and offline queue
 │   ├── db.ts              # IndexedDB (idb)
-│   ├── share.ts, ui.ts    # Web Share, in-app notifications, helpers
+│   ├── share.ts, ui.ts    # Share button (Web Share or copy link), in-app notifications, helpers
+│   ├── logger.ts          # The only place that uses console; debug output is dev-only
 │   └── types.d.ts         # Types for browser APIs missing from lib.dom
 ├── tsconfig.json
 ├── index.html
@@ -143,10 +144,15 @@ VitePWA({
 })
 ```
 
+### Updates
+The app registers its own service worker in `src/sw.ts` (`registerType: 'prompt'`, no auto-injected `registerSW.js`). When a new version is deployed, it installs in the background and a "A new version is available" prompt appears with **Reload** and **Later**. Nothing activates or reloads until the user clicks Reload, so an update never discards in-progress input. If they choose Later, the prompt returns on their next visit. Visitors with no controlling service worker (a first visit) simply get the new version.
+
 ### Security Headers & CSP
 `plugins/security-headers.js` is the single source for the Content Security Policy and related headers. On build it writes a `dist/_headers` file (used by Netlify and Cloudflare Pages), adds the CSP as a `<meta>` fallback to `index.html`, and `npm run preview` serves the same headers. Other hosts need the headers set in their own config (e.g. `vercel.json`, nginx), copied from `_headers`. The meta fallback cannot express `frame-ancestors`.
 
 The policy allows no inline scripts or styles. If you add an API, analytics or CDN origin, add it to the matching directive (usually `connect-src`) in that file. The connectivity check in `src/network.ts` pings `www.gstatic.com` and `httpbin.org`, which are listed there. The dev server does not send the CSP, since Vite's HMR needs inline styles and websockets, so test CSP changes with `npm run build && npm run preview`.
+
+Use `log` from `src/logger.ts` instead of `console` (ESLint enforces this). `log.debug` prints only in development; `log.warn` and `log.error` are kept in production builds.
 
 Never build markup by concatenating strings into `innerHTML`; use `textContent` and DOM APIs as `src/ui.ts` and `src/network.ts` do.
 

@@ -29,7 +29,7 @@ export default [
       '@typescript-eslint/no-require-imports': 'error',
       
       // General Rules
-      'no-console': 'warn',
+      'no-console': 'error',
       'no-debugger': 'error',
       'no-alert': 'error',
       'no-eval': 'error',
@@ -78,6 +78,12 @@ export default [
     rules: {
       'no-console': 'off',
       '@typescript-eslint/no-explicit-any': 'off'
+    }
+  },
+  {
+    files: ['src/logger.ts'],
+    rules: {
+      'no-console': 'off'
     }
   },
   {

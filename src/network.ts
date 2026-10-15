@@ -1,3 +1,4 @@
+import { log } from './logger';
 let online = navigator.onLine;
 let networkInfo: NetworkInformation | null = null;
 const onlineListeners: Array<() => void> = [];
@@ -14,7 +15,7 @@ export function setupNetworkListener(): void {
   if (navigator.connection) {
     networkInfo = navigator.connection;
     networkInfo.addEventListener('change', () => {
-      console.log('Network conditions changed:', networkInfo);
+      log.debug('Network conditions changed:', networkInfo);
       void checkConnectivity();
     });
   }
@@ -131,14 +132,14 @@ export async function checkConnectivity(): Promise<boolean | undefined> {
 }
 
 function handleOnline(): void {
-  console.log('Device went online');
+  log.debug('Device went online');
   online = true;
   void checkConnectivity();
   onlineListeners.forEach((listener) => listener());
 }
 
 function handleOffline(): void {
-  console.log('Device went offline');
+  log.debug('Device went offline');
   online = false;
   const container = document.getElementById('container');
   if (container) {
@@ -147,6 +148,6 @@ function handleOffline(): void {
 }
 
 export function handleConnectivityRestored(): void {
-  console.log('Connectivity restored via background sync');
+  log.debug('Connectivity restored via background sync');
   void checkConnectivity();
 }

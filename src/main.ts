@@ -12,13 +12,14 @@ import {
   startConnectivityMonitoring,
 } from './network';
 import { initDatabase } from './db';
-import { shareContent } from './share';
+import { setupShare } from './share';
 import { setupServiceWorker } from './sw';
 import { setupBackgroundSync, syncOfflineActions } from './sync';
 import { onClick } from './ui';
+import { log } from './logger';
 
 async function init(): Promise<void> {
-  console.log('PWA App initializing...');
+  log.debug('PWA App initializing...');
 
   // Initialize service worker
   await setupServiceWorker();
@@ -28,6 +29,7 @@ async function init(): Promise<void> {
   onOnline(() => void syncOfflineActions());
   setupInstallation();
   initNotifications(); // Initialize infrastructure only, don't request permission
+  setupShare();
   setupActionButtons();
   setupBackgroundSync();
 
@@ -40,18 +42,11 @@ async function init(): Promise<void> {
   // Setup UI event listeners
   onClick('refresh-button', () => void checkConnectivity());
 
-  console.log('PWA App initialized successfully');
+  log.debug('PWA App initialized successfully');
 }
 
-// Click handlers for the share and notification buttons
+// Click handler for the notifications button
 function setupActionButtons(): void {
-  onClick('share-button', (event) => {
-    if ('share' in navigator) {
-      event.preventDefault();
-      void shareContent();
-    }
-  });
-
   onClick('notifications-button', (event) => {
     event.preventDefault();
     void requestNotificationPermission();
@@ -67,18 +62,18 @@ if (document.readyState === 'loading') {
 
 // Global error handling
 window.addEventListener('error', (event) => {
-  console.error('Global error:', event.error);
+  log.error('Global error:', event.error);
 });
 
 window.addEventListener('unhandledrejection', (event) => {
-  console.error('Unhandled promise rejection:', event.reason);
+  log.error('Unhandled promise rejection:', event.reason);
 });
 
 // Performance monitoring
 if ('PerformanceObserver' in window) {
   const observer = new PerformanceObserver((list) => {
     list.getEntries().forEach((entry) => {
-      console.log('Performance entry:', entry.name, entry.startTime);
+      log.debug('Performance entry:', entry.name, entry.startTime);
     });
   });
 

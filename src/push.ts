@@ -1,4 +1,5 @@
 import { showInAppNotification } from './ui';
+import { log } from './logger';
 
 // VAPID public key for push notifications (replace with your actual key)
 const VAPID_PUBLIC_KEY: string = import.meta.env.VITE_VAPID_PUBLIC_KEY || '';
@@ -11,7 +12,7 @@ export async function setupPushNotifications(
 ): Promise<PushSubscription | null | undefined> {
   // Prevent duplicate setup
   if (notificationSetupComplete && showMessages) {
-    console.log('Push notifications already configured, skipping setup');
+    log.debug('Push notifications already configured, skipping setup');
     return undefined;
   }
 
@@ -20,7 +21,7 @@ export async function setupPushNotifications(
       // Check if service worker is available
       const registrations = await navigator.serviceWorker.getRegistrations();
       if (registrations.length === 0) {
-        console.log(
+        log.debug(
           'No service worker available for push notifications (development mode)'
         );
         if (showMessages && !notificationSetupComplete) {
@@ -38,14 +39,14 @@ export async function setupPushNotifications(
         await registration.pushManager.getSubscription();
 
       if (existingSubscription) {
-        console.log('Push subscription already exists');
+        log.debug('Push subscription already exists');
         notificationSetupComplete = true;
         return existingSubscription;
       }
 
       // Check if VAPID key is configured
       if (!VAPID_PUBLIC_KEY.trim()) {
-        console.log(
+        log.debug(
           'Push notifications: VAPID key not configured, skipping subscription'
         );
         if (showMessages && !notificationSetupComplete) {
@@ -64,7 +65,7 @@ export async function setupPushNotifications(
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
       });
 
-      console.log('New push subscription created');
+      log.debug('New push subscription created');
 
       // Send subscription to server (if endpoint exists)
       await sendSubscriptionToServer(newSubscription);
@@ -78,7 +79,7 @@ export async function setupPushNotifications(
       notificationSetupComplete = true;
       return newSubscription;
     } catch (error) {
-      console.warn('Push notification setup failed:', error);
+      log.warn('Push notification setup failed:', error);
 
       // More specific error messages (only if showing messages)
       if (showMessages) {
@@ -94,7 +95,7 @@ export async function setupPushNotifications(
             'Push notifications blocked by browser settings'
           );
         } else {
-          console.error('Push setup error details:', message);
+          log.error('Push setup error details:', message);
           if (!notificationSetupComplete) {
             showInAppNotification(
               'Basic Notifications',
@@ -136,15 +137,13 @@ async function sendSubscriptionToServer(
     });
 
     if (response.ok) {
-      console.log('Push subscription sent to server successfully');
+      log.debug('Push subscription sent to server successfully');
     } else {
-      console.log(
-        'Push subscription endpoint not available (development mode)'
-      );
+      log.debug('Push subscription endpoint not available (development mode)');
     }
   } catch (error) {
     // Expected in development - no backend server
-    console.log(
+    log.debug(
       'Push subscription server not available (development mode):',
       (error as Error).message
     );
@@ -152,9 +151,9 @@ async function sendSubscriptionToServer(
     // Store subscription locally for development
     try {
       localStorage.setItem('push-subscription', JSON.stringify(subscription));
-      console.log('Push subscription stored locally for development');
+      log.debug('Push subscription stored locally for development');
     } catch (storageError) {
-      console.warn('Could not store push subscription locally:', storageError);
+      log.warn('Could not store push subscription locally:', storageError);
     }
   }
 }

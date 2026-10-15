@@ -1,4 +1,5 @@
 import type { IDBPDatabase } from 'idb';
+import { log } from './logger';
 
 export interface OfflineAction {
   id?: number;
@@ -31,9 +32,9 @@ export async function initDatabase(): Promise<void> {
       },
     });
 
-    console.log('IndexedDB initialized');
+    log.debug('IndexedDB initialized');
   } catch (error) {
-    console.error('IndexedDB initialization failed:', error);
+    log.error('IndexedDB initialization failed:', error);
   }
 }
 
@@ -47,6 +48,6 @@ export async function storeOfflineAction(
     const action: OfflineAction = { type, data, timestamp: Date.now() };
     await db.add('offline-actions', action);
   } catch (error) {
-    console.error('Failed to store offline action:', error);
+    log.error('Failed to store offline action:', error);
   }
 }
