@@ -71,17 +71,17 @@ function updateNotificationUI(permission: NotificationPermission): void {
 
   switch (permission) {
     case 'default':
-      notificationButton.style.display = 'block';
+      notificationButton.hidden = false;
       notificationButton.textContent = '🔔 Enable Notifications';
       notificationButton.disabled = false;
       break;
     case 'granted':
-      notificationButton.style.display = 'block';
+      notificationButton.hidden = false;
       notificationButton.textContent = '✅ Notifications Enabled';
       notificationButton.disabled = true;
       break;
     case 'denied':
-      notificationButton.style.display = 'block';
+      notificationButton.hidden = false;
       notificationButton.textContent = '❌ Notifications Blocked';
       notificationButton.disabled = true;
       break;

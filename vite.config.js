@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { existsSync } from 'node:fs'
 import { siteUrl } from './plugins/site-url.js'
+import { securityHeaders } from './plugins/security-headers.js'
 
 const hasCerts = existsSync('./cert/key.pem') && existsSync('./cert/cert.pem')
 
@@ -9,25 +10,21 @@ export default defineConfig({
   publicDir: 'public',
   plugins: [
     siteUrl(),
+    securityHeaders(),
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,txt,woff2,xml}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,txt,xml}'],
         skipWaiting: false, // Prevent immediate activation in dev
         clientsClaim: false, // Don't claim clients immediately
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'google-fonts-stylesheets'
-            }
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\//,
+            // Self-hosted fonts (see @fontsource-variable/inter). Not precached,
+            // because the package ships a file per script/subset.
+            urlPattern: /\.woff2$/,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'google-fonts-webfonts',
+              cacheName: 'fonts',
               expiration: {
                 maxEntries: 30,
                 maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year

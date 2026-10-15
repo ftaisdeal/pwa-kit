@@ -57,10 +57,8 @@
   </script>
 
   <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  <!-- The Content-Security-Policy is defined in plugins/security-headers.js and added at build time -->
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <!-- PWA Meta Tags -->
   <meta name="mobile-web-app-capable" content="yes" />
@@ -71,9 +69,6 @@
   <meta name="msapplication-TileColor" content="#1976d2" />
 
   <!-- Modern Stylesheets -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css">
 
   <!-- PWA Manifest and Icons -->
@@ -244,22 +239,16 @@ npm run build</code></pre>
   </main>
 
   <!-- Action buttons for testing -->
-  <button class="share-button button button-primary" type="button" style="display: none;">
+  <button class="share-button button button-primary" type="button" hidden>
     📤 Share App
   </button>
 
-  <button class="notifications-button button button-secondary" type="button" style="display: none;">
+  <button class="notifications-button button button-secondary" type="button" hidden>
     🔔 Enable Notifications
   </button>
 
   <!-- Modern module script -->
   <script type="module" src="/src/main.ts"></script>
-
-  <!-- Fallback for browsers without module support -->
-  <script nomodule>
-    console.warn('This browser does not support ES6 modules. Please use a modern browser.');
-    document.body.innerHTML = '<h1>Browser Not Supported</h1><p>Please use a modern browser that supports ES6 modules.</p>';
-  </script>
 </body>
 
 </html>

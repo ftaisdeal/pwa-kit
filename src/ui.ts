@@ -1,10 +1,9 @@
 export function showInAppNotification(title: string, body: string): void {
   const notification = document.createElement('div');
   notification.className = 'in-app-notification';
-  notification.innerHTML = `
-      <strong>${title}</strong><br>
-      ${body}
-    `;
+  const heading = document.createElement('strong');
+  heading.textContent = title;
+  notification.append(heading, document.createElement('br'), body);
 
   document.body.appendChild(notification);
 

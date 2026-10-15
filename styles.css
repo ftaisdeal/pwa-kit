@@ -127,7 +127,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
+  font-family: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
     'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
@@ -385,6 +385,10 @@ a {
     opacity: 0;
     transform: translateX(100px);
   }
+}
+
+[hidden] {
+  display: none !important;
 }
 
 /* Cards and Surfaces */

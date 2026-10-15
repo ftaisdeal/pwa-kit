@@ -1,4 +1,5 @@
 // Modern PWA Application Logic
+import '@fontsource-variable/inter/wght.css';
 import { setupInstallation } from './install';
 import {
   initNotifications,
