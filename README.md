@@ -1,6 +1,6 @@
 # PWA Kit Modern - Progressive Web App Starter
 
-[![Vite](https://img.shields.io/badge/Vite-5.0-646CFF)](https://vitejs.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF)](https://vitejs.dev/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-purple)](https://web.dev/progressive-web-apps/)
 
 A modern, feature-complete Progressive Web App starter kit built with the latest web technologies and best practices. Built to score well on Lighthouse out of the box with caching strategies, offline support, and modern web APIs.
@@ -8,7 +8,7 @@ A modern, feature-complete Progressive Web App starter kit built with the latest
 ## ✨ Features
 
 ### 🚀 Modern Development Stack
-- **Vite 5.0** - Lightning-fast build tool with HMR
+- **Vite 8** - Lightning-fast build tool with HMR
 - **ESLint** (flat config) and **Prettier**
 - **Vitest** for unit testing with UI
 - **Playwright** for E2E testing across browsers
@@ -45,7 +45,7 @@ A modern, feature-complete Progressive Web App starter kit built with the latest
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ and npm 9+
+- Node.js 22.12+ and npm 10+
 - Modern browser with PWA support
 
 ### Installation
@@ -103,7 +103,17 @@ pwa-kit/
 │   ├── sitemap.xml
 │   └── .well-known/security.txt
 ├── plugins/site-url.js    # Vite plugin that does the substitution
-├── app.js                 # Application logic
+├── src/                   # TypeScript source (entry: main.ts)
+│   ├── sw.ts              # Service worker registration and updates
+│   ├── network.ts         # Connectivity detection
+│   ├── install.ts         # Install prompt
+│   ├── notifications.ts   # Notification permission and UI
+│   ├── push.ts            # Push subscription
+│   ├── sync.ts            # Background sync and offline queue
+│   ├── db.ts              # IndexedDB (idb)
+│   ├── share.ts, ui.ts    # Web Share, in-app notifications, helpers
+│   └── types.d.ts         # Types for browser APIs missing from lib.dom
+├── tsconfig.json
 ├── index.html
 ├── styles.css
 ├── vite.config.js         # Vite + PWA plugin + web app manifest

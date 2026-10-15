@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
-import legacy from '@vitejs/plugin-legacy'
 import { existsSync } from 'node:fs'
 import { siteUrl } from './plugins/site-url.js'
 
@@ -10,9 +9,6 @@ export default defineConfig({
   publicDir: 'public',
   plugins: [
     siteUrl(),
-    legacy({
-      targets: ['defaults', 'not IE 11']
-    }),
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
@@ -82,19 +78,11 @@ export default defineConfig({
     })
   ],
   build: {
-    target: 'es2020',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['idb', 'workbox-window', 'comlink']
-        }
-      }
-    },
+    target: 'baseline-widely-available',
     sourcemap: true,
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true
+    rolldownOptions: {
+      output: {
+        minify: { compress: { dropConsole: true } }
       }
     }
   },

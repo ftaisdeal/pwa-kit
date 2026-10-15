@@ -1,6 +1,5 @@
 import js from '@eslint/js'
-import typescript from '@typescript-eslint/eslint-plugin'
-import typescriptParser from '@typescript-eslint/parser'
+import tseslint from 'typescript-eslint'
 import globals from 'globals'
 
 export default [
@@ -9,7 +8,7 @@ export default [
   {
     files: ['**/*.{js,ts}'],
     languageOptions: {
-      parser: typescriptParser,
+      parser: tseslint.parser,
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module'
@@ -20,13 +19,14 @@ export default [
       }
     },
     plugins: {
-      '@typescript-eslint': typescript
+      '@typescript-eslint': tseslint.plugin
     },
     rules: {
       // TypeScript Rules
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-var-requires': 'error',
+      '@typescript-eslint/no-require-imports': 'error',
       
       // General Rules
       'no-console': 'warn',
@@ -58,6 +58,13 @@ export default [
       'no-async-promise-executor': 'error',
       'no-await-in-loop': 'warn',
       'no-return-await': 'error'
+    }
+  },
+  {
+    // TypeScript already reports undefined names (and knows the DOM types)
+    files: ['**/*.ts'],
+    rules: {
+      'no-undef': 'off'
     }
   },
   {

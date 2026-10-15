@@ -273,7 +273,8 @@ a {
 }
 
 /* Buttons */
-.button {
+.button,
+.install-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -302,7 +303,8 @@ a {
   }
 }
 
-.button-primary {
+.button-primary,
+.install-button {
   background: var(--primary-color);
   color: white;
   
@@ -329,7 +331,6 @@ a {
 }
 
 .install-button {
-  @extend .button, .button-primary;
   position: fixed;
   bottom: var(--spacing-lg);
   right: var(--spacing-lg);
@@ -387,7 +388,8 @@ a {
 }
 
 /* Cards and Surfaces */
-.card {
+.card,
+.feature-card {
   background: var(--surface-color);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
@@ -411,7 +413,6 @@ a {
 }
 
 .feature-card {
-  @extend .card;
   text-align: center;
   
   .feature-icon {
