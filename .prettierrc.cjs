@@ -1,4 +1,4 @@
-# Prettier Configuration
+// Prettier Configuration
 
 module.exports = {
   semi: true,

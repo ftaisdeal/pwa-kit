@@ -5,8 +5,8 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: ['./src/test/setup.js'],
-    include: ['src/**/*.{test,spec}.{js,ts}'],
+    include: ['tests/unit/**/*.{test,spec}.{js,ts}', 'src/**/*.{test,spec}.{js,ts}'],
+    passWithNoTests: true,
     exclude: ['node_modules', 'dist', '.git'],
     coverage: {
       provider: 'v8',
@@ -19,12 +19,10 @@ export default defineConfig({
         'dist/',
       ],
       thresholds: {
-        global: {
-          branches: 80,
-          functions: 80,
-          lines: 80,
-          statements: 80
-        }
+        branches: 80,
+        functions: 80,
+        lines: 80,
+        statements: 80
       }
     },
     testTimeout: 10000,

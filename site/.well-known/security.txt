@@ -1,16 +1,16 @@
-Contact: mailto:security@yoursite.com
+Contact: mailto:security@%SITE_HOST%
 Expires: 2027-03-06T00:00:00.000Z
 Preferred-Languages: en
-Canonical: https://yoursite.com/.well-known/security.txt
+Canonical: %SITE_URL%/.well-known/security.txt
 
 # Security Policy
-Policy: https://yoursite.com/security-policy
+Policy: %SITE_URL%/security-policy
 
 # Bug Bounty (if applicable)
-# Acknowledgments: https://yoursite.com/security-acknowledgments
+# Acknowledgments: %SITE_URL%/security-acknowledgments
 
 # Encryption key (if applicable)  
-# Encryption: https://yoursite.com/pgp-key.txt
+# Encryption: %SITE_URL%/pgp-key.txt
 
 # Additional contact methods
-# Contact: https://yoursite.com/security-contact
+# Contact: %SITE_URL%/security-contact

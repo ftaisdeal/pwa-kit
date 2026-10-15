@@ -173,7 +173,7 @@ class PWAApp {
   initNotifications() {
     if ('Notification' in window) {
       // Check current permission status
-      const permission = Notification.permission;
+      const { permission } = Notification;
       console.log('Current notification permission:', permission);
       
       // Show/hide notification button based on permission status

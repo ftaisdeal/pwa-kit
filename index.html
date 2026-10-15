@@ -16,20 +16,20 @@
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://yoursite.com/" />
+  <meta property="og:url" content="%SITE_URL%/" />
   <meta property="og:title" content="PWA Kit Modern - Progressive Web App Starter" />
   <meta property="og:description" content="Build modern PWAs with TypeScript, Vite, and advanced caching" />
-  <meta property="og:image" content="https://yoursite.com/img/icons-512.png" />
+  <meta property="og:image" content="%SITE_URL%/img/icons-512.png" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://yoursite.com/" />
+  <meta property="twitter:url" content="%SITE_URL%/" />
   <meta property="twitter:title" content="PWA Kit Modern - Progressive Web App Starter" />
   <meta property="twitter:description" content="Build modern PWAs with TypeScript, Vite, and advanced caching" />
-  <meta property="twitter:image" content="https://yoursite.com/img/icons-512.png" />
+  <meta property="twitter:image" content="%SITE_URL%/img/icons-512.png" />
 
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://yoursite.com/" />
+  <link rel="canonical" href="%SITE_URL%/" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -39,7 +39,7 @@
     "name": "PWA Kit Modern",
     "alternateName": "PWA Kit",
     "description": "Modern Progressive Web App starter kit with TypeScript, Vite, and advanced features",
-    "url": "https://yoursite.com",
+    "url": "%SITE_URL%/",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
     "offers": {
@@ -51,7 +51,6 @@
       "@type": "Organization",
       "name": "PWA Kit Modern"
     },
-    "screenshot": "https://yoursite.com/img/screenshot.png",
     "softwareVersion": "2.0.0",
     "releaseNotes": "Modern PWA features with TypeScript and Vite support"
   }
@@ -70,7 +69,6 @@
   <meta name="apple-mobile-web-app-title" content="PWA Kit Modern" />
   <meta name="application-name" content="PWA Kit Modern" />
   <meta name="msapplication-TileColor" content="#1976d2" />
-  <meta name="msapplication-config" content="/browserconfig.xml" />
 
   <!-- Modern Stylesheets -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -79,7 +77,7 @@
   <link rel="stylesheet" href="styles.css">
 
   <!-- PWA Manifest and Icons -->
-  <link rel="manifest" href="manifest.webmanifest" />
+  <!-- The web app manifest is generated and linked by vite-plugin-pwa (see vite.config.js) -->
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="img/icons-192.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
@@ -241,8 +239,7 @@ npm run build</code></pre>
     </section>
 
     <footer>
-      <p>Built with modern web standards • <a href="https://github.com/your-username/pwa-kit-modern" target="_blank"
-          rel="noopener">View on GitHub</a></p>
+      <p>Built with modern web standards</p>
     </footer>
   </main>
 

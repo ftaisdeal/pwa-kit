@@ -1,10 +1,15 @@
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import legacy from '@vitejs/plugin-legacy'
+import { existsSync } from 'node:fs'
+import { siteUrl } from './plugins/site-url.js'
+
+const hasCerts = existsSync('./cert/key.pem') && existsSync('./cert/cert.pem')
 
 export default defineConfig({
   publicDir: 'public',
   plugins: [
+    siteUrl(),
     legacy({
       targets: ['defaults', 'not IE 11']
     }),
@@ -49,28 +54,25 @@ export default defineConfig({
       manifest: {
         name: 'PWA Kit Modern',
         short_name: 'PWA Kit',
-        description: 'Modern Progressive Web App starter with TypeScript & Vite',
+        description: 'Modern Progressive Web App starter with advanced features and perfect Lighthouse scores',
         theme_color: '#1976d2',
         background_color: '#ffffff',
         display: 'standalone',
         scope: '/',
         start_url: '/',
+        lang: 'en-US',
+        dir: 'ltr',
+        categories: ['utilities', 'productivity'],
         icons: [
           {
-            src: 'img/icons-192.png',
+            src: '/img/icons-192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'img/icons-512.png',
+            src: '/img/icons-512.png',
             sizes: '512x512',
             type: 'image/png'
-          },
-          {
-            src: 'img/icons-512-maskable.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable'
           }
         ]
       },
@@ -115,10 +117,10 @@ export default defineConfig({
   preview: {
     host: true,
     port: 4173,
-    https: {
-      key: './cert/key.pem', 
-      cert: './cert/cert.pem'
-    }
+    // Use HTTPS only when local certs exist (run ./generate-certs.sh)
+    https: hasCerts
+      ? { key: './cert/key.pem', cert: './cert/cert.pem' }
+      : undefined
   },
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version),

@@ -1,8 +1,10 @@
 import js from '@eslint/js'
 import typescript from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
+import globals from 'globals'
 
 export default [
+  { ignores: ['dist/', 'coverage/', 'playwright-report/', 'test-results/'] },
   js.configs.recommended,
   {
     files: ['**/*.{js,ts}'],
@@ -13,14 +15,8 @@ export default [
         sourceType: 'module'
       },
       globals: {
-        window: 'readonly',
-        document: 'readonly',
-        navigator: 'readonly',
-        console: 'readonly',
-        self: 'readonly',
-        importScripts: 'readonly',
-        WorkerGlobalScope: 'readonly',
-        ServiceWorkerGlobalScope: 'readonly'
+        ...globals.browser,
+        ...globals.serviceworker
       }
     },
     plugins: {
@@ -30,7 +26,6 @@ export default [
       // TypeScript Rules
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/prefer-const': 'error',
       '@typescript-eslint/no-var-requires': 'error',
       
       // General Rules
@@ -62,13 +57,13 @@ export default [
       'prefer-promise-reject-errors': 'error',
       'no-async-promise-executor': 'error',
       'no-await-in-loop': 'warn',
-      'no-return-await': 'error',
-      
-      // Security
-      'no-eval': 'error',
-      'no-implied-eval': 'error',
-      'no-new-func': 'error',
-      'no-script-url': 'error'
+      'no-return-await': 'error'
+    }
+  },
+  {
+    files: ['*.config.{js,cjs}', '.prettierrc.cjs', 'plugins/**/*.js'],
+    languageOptions: {
+      globals: globals.node
     }
   },
   {

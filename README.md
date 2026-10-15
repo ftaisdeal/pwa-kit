@@ -1,24 +1,21 @@
 # PWA Kit Modern - Progressive Web App Starter
 
-[![Lighthouse PWA Score](https://img.shields.io/badge/Lighthouse-100%2F100-brightgreen)](https://developers.google.com/web/tools/lighthouse)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.0-646CFF)](https://vitejs.dev/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-purple)](https://web.dev/progressive-web-apps/)
 
-A modern, feature-complete Progressive Web App starter kit built with the latest web technologies and best practices. Achieve perfect Lighthouse PWA scores out of the box with advanced caching strategies, offline support, and modern web APIs.
+A modern, feature-complete Progressive Web App starter kit built with the latest web technologies and best practices. Built to score well on Lighthouse out of the box with caching strategies, offline support, and modern web APIs.
 
 ## ✨ Features
 
 ### 🚀 Modern Development Stack
 - **Vite 5.0** - Lightning-fast build tool with HMR
-- **TypeScript** ready with strict configuration
-- **Modern ESLint** config with PWA-specific rules
+- **ESLint** (flat config) and **Prettier**
 - **Vitest** for unit testing with UI
 - **Playwright** for E2E testing across browsers
 - **Workbox** integration for advanced service worker features
 
 ### 📱 PWA Features
-- **Perfect Lighthouse scores** (100/100 PWA score)
+- **High Lighthouse scores** (verify with `npm run lighthouse`)
 - **Advanced caching strategies** (Cache First, Network First, Stale While Revalidate)
 - **Smart offline detection** with multiple endpoint testing
 - **Background sync** for offline actions
@@ -41,12 +38,9 @@ A modern, feature-complete Progressive Web App starter kit built with the latest
 - **View Transitions API** support
 
 ### 🛡️ Security & Performance
-- **Content Security Policy** ready
-- **Secure HTTPS** development server
-- **Bundle analysis** and optimization
-- **Performance monitoring** with Web Vitals
-- **Error boundary** and global error handling
-- **Modern indexedDB** integration with Dexie
+- **Content Security Policy** (meta tag; prefer HTTP headers in production)
+- **Optional HTTPS** for `npm run preview` (see SSL Certificate Setup)
+- **IndexedDB** integration via `idb`
 
 ## 🚀 Quick Start
 
@@ -56,14 +50,14 @@ A modern, feature-complete Progressive Web App starter kit built with the latest
 
 ### Installation
 ```bash
-git clone https://github.com/your-username/pwa-kit-modern.git
-cd pwa-kit-modern
+git clone <your-fork-or-template-url> my-app
+cd my-app
 npm install
 ```
 
 ### Development
 ```bash
-# Start development server with HTTPS
+# Start development server
 npm run dev
 
 # Run tests
@@ -79,53 +73,61 @@ npm run build
 npm run preview
 ```
 
+### After You Clone
+Before deploying your own app:
+- [ ] Rename the package in `package.json` and set your own `name`, `author` and `repository` fields
+- [ ] Set `VITE_SITE_URL` to your production origin, e.g. `VITE_SITE_URL=https://app.example.org` in `.env.production`. It fills in the canonical, Open Graph and structured-data URLs in `index.html`, and the templates in `site/` (`robots.txt`, `sitemap.xml`, `.well-known/security.txt`). It defaults to `https://example.com`, and the build warns when it is unset
+- [ ] Update the security contact and `Expires` date in `site/.well-known/security.txt`, and the pages in `site/sitemap.xml`
+- [ ] Replace the placeholder icons (see Icons & Assets) and the manifest names in `vite.config.js`
+- [ ] Update the title, description and `og:` text in `index.html`
+- [ ] Once your app has a real UI, add a `screenshot` URL to the JSON-LD block in `index.html` and `screenshots` to the manifest in `vite.config.js` (used for the richer install dialog)
+
 ### SSL Certificate Setup
 For full PWA features in development, generate SSL certificates:
 ```bash
-# Create cert directory
-mkdir cert
-
-# Generate self-signed certificate (macOS/Linux)
-openssl req -x509 -newkey rsa:4096 -keyout cert/key.pem -out cert/cert.pem -sha256 -days 365 -nodes
-
-# Windows (using mkcert - install first: https://github.com/FiloSottile/mkcert)
-mkcert -key-file cert/key.pem -cert-file cert/cert.pem localhost 127.0.0.1
+# Uses mkcert if installed, otherwise OpenSSL
+./generate-certs.sh
 ```
+The `cert/` directory is git-ignored. `npm run preview` serves over HTTPS when the certificates exist, and over HTTP otherwise.
 
 ## 📁 Project Structure
 
 ```
-pwa-kit-modern/
-├── public/                 # Static assets
-│   ├── img/               # App icons and images
-│   ├── manifest.webmanifest
-│   └── favicon.ico
-├── src/                   # Source code
-│   ├── components/        # Reusable components
-│   ├── utils/            # Utility functions
-│   ├── types/            # TypeScript definitions
-│   └── test/             # Test utilities
-├── tests/                # Test files
-│   ├── unit/             # Unit tests
-│   └── e2e/              # End-to-end tests
-├── vite.config.js        # Vite configuration
-├── playwright.config.js  # E2E test configuration
+pwa-kit/
+├── public/                 # Static assets (copied as-is)
+│   ├── img/               # App icons
+│   ├── offline.html       # Offline fallback page
+│   └── ...                # favicons
+├── site/                  # Templates filled with VITE_SITE_URL at build time
+│   ├── robots.txt
+│   ├── sitemap.xml
+│   └── .well-known/security.txt
+├── plugins/site-url.js    # Vite plugin that does the substitution
+├── app.js                 # Application logic
+├── index.html
+├── styles.css
+├── vite.config.js         # Vite + PWA plugin + web app manifest
+├── vitest.config.js       # Unit tests (tests/unit/**)
+├── playwright.config.js   # E2E tests (tests/e2e/**)
+├── eslint.config.js
 └── package.json
 ```
 
 ## 🔧 Configuration
 
 ### PWA Manifest
-Update `public/manifest.webmanifest` with your app details:
-```json
-{
-  "name": "Your App Name",
-  "short_name": "YourApp",
-  "start_url": "/",
-  "display": "standalone",
-  "theme_color": "#1976d2",
-  "background_color": "#ffffff"
-}
+The manifest is generated by `vite-plugin-pwa` from the `manifest` option in `vite.config.js` (there is no static `manifest.webmanifest`). Update it with your app details:
+```javascript
+VitePWA({
+  manifest: {
+    name: 'Your App Name',
+    short_name: 'YourApp',
+    start_url: '/',
+    display: 'standalone',
+    theme_color: '#1976d2',
+    background_color: '#ffffff'
+  }
+})
 ```
 
 ### Service Worker
@@ -161,7 +163,7 @@ The starter includes minimal placeholder icons. **You should generate your own b
 /apple-touch-icon.png    # 180×180 iOS icon
 /img/icons-192.png       # 192×192 Android icon
 /img/icons-512.png       # 512×512 splash screen
-/img/icons-512-maskable.png # 512×512 maskable (safe area)
+/img/icons-512-maskable.png # 512×512 maskable (safe area); add it to the manifest icons with purpose: 'maskable'
 
 # Optional but recommended
 /img/icons-72.png        # 72×72 small devices
@@ -173,6 +175,9 @@ The starter includes minimal placeholder icons. **You should generate your own b
 ### Environment Variables
 Create `.env` files for different environments:
 ```bash
+# .env.production
+VITE_SITE_URL=https://yourapp.example.org
+
 # .env.local
 VITE_API_URL=https://api.yourapp.com
 VITE_VAPID_PUBLIC_KEY=your_vapid_key_here
@@ -184,7 +189,7 @@ VITE_VAPID_PUBLIC_KEY=your_vapid_key_here
 ```bash
 npm test                  # Run once
 npm run test:ui          # Interactive UI
-npm run test:coverage    # With coverage report
+npm run test:coverage    # With coverage report (80% thresholds)
 ```
 
 ### E2E Tests
@@ -197,7 +202,6 @@ npm run e2e:debug       # Debug mode
 ### Performance Testing
 ```bash
 npm run lighthouse      # Generate Lighthouse report
-npm run analyze         # Bundle size analysis
 ```
 
 ## 📦 Production Deployment
@@ -226,18 +230,11 @@ Works with any static hosting:
 
 ## 🔍 Lighthouse Optimization
 
-This template achieves perfect Lighthouse PWA scores:
-- ✅ **PWA: 100/100** - Full PWA compliance
-- ✅ **Performance: 95+** - Optimized loading
-- ✅ **Accessibility: 100** - WCAG compliant
-- ✅ **Best Practices: 100** - Security & standards
-- ✅ **SEO: 100** - Search optimized
+This template is designed to score highly on Lighthouse. Run `npm run lighthouse` (with a dev or preview server running) to measure your own build; scores depend on your content and hosting.
 
 ### Key Optimizations
 - Efficient caching strategies
-- Image optimization and lazy loading
 - Code splitting and tree shaking
-- Critical CSS inlining
 - Service worker precaching
 - ARIA labels and semantic HTML
 - Meta tags and structured data
@@ -260,12 +257,6 @@ This template achieves perfect Lighthouse PWA scores:
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙋 Support
-
-- 📖 [Documentation](https://github.com/your-username/pwa-kit-modern/wiki)
-- 🐛 [Issue Tracker](https://github.com/your-username/pwa-kit-modern/issues)
-- 💬 [Discussions](https://github.com/your-username/pwa-kit-modern/discussions)
 
 ## 🌟 Acknowledgments
 

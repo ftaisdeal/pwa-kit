@@ -39,7 +39,7 @@ Allow: /apple-touch-icon*
 Allow: /img/
 
 # Sitemap location
-Sitemap: https://yoursite.com/sitemap.xml
+Sitemap: %SITE_URL%/sitemap.xml
 
 # Crawl-delay for being respectful to servers
 Crawl-delay: 1
