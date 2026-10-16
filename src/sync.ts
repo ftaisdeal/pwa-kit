@@ -1,7 +1,12 @@
+import type { IDBPDatabase } from 'idb';
 import { getDb, storeOfflineAction, type OfflineAction } from './db';
 import { isOnline } from './network';
 import { showInAppNotification } from './ui';
 import { log } from './logger';
+
+// Replays are attempted this many times in total. After the last failure the
+// action is dropped, so a permanently failing request cannot pile up forever.
+export const MAX_SYNC_ATTEMPTS = 5;
 
 export function setupBackgroundSync(): void {
   if (
@@ -60,7 +65,7 @@ export async function syncOfflineActions(): Promise<void> {
         await processOfflineAction(action);
         await db.delete('offline-actions', action.id as number);
       } catch (error) {
-        log.error('Failed to sync action:', action, error);
+        await recordFailedAttempt(db, action, error);
       }
     }
   } catch (error) {
@@ -68,15 +73,49 @@ export async function syncOfflineActions(): Promise<void> {
   }
 }
 
+async function recordFailedAttempt(
+  db: IDBPDatabase,
+  action: OfflineAction,
+  error: unknown
+): Promise<void> {
+  const attempts = (action.attempts ?? 0) + 1;
+
+  try {
+    if (attempts >= MAX_SYNC_ATTEMPTS) {
+      log.error(
+        `Giving up on offline action after ${attempts} attempts:`,
+        action,
+        error
+      );
+      await db.delete('offline-actions', action.id as number);
+    } else {
+      log.error(
+        `Failed to sync action (attempt ${attempts} of ${MAX_SYNC_ATTEMPTS}):`,
+        action,
+        error
+      );
+      await db.put('offline-actions', { ...action, attempts });
+    }
+  } catch (storageError) {
+    log.error('Could not update the failed action:', storageError);
+  }
+}
+
 async function processOfflineAction(action: OfflineAction): Promise<void> {
   switch (action.type) {
-    case 'form-submission':
-      await fetch('/api/submit', {
+    case 'form-submission': {
+      const response = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(action.data),
       });
+      // fetch only rejects on network errors. Throw on an error status too,
+      // so the action stays queued instead of being deleted as if it was sent.
+      if (!response.ok) {
+        throw new Error(`Server responded with ${response.status}`);
+      }
       break;
+    }
     default:
       log.warn('Unknown action type:', action.type);
   }

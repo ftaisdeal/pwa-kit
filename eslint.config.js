@@ -77,7 +77,8 @@ export default [
     files: ['**/*.test.{js,ts}', 'tests/**/*.{js,ts}'],
     rules: {
       'no-console': 'off',
-      '@typescript-eslint/no-explicit-any': 'off'
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-await-in-loop': 'off'
     }
   },
   {

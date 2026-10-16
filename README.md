@@ -147,6 +147,13 @@ VitePWA({
 ### Updates
 The app registers its own service worker in `src/sw.ts` (`registerType: 'prompt'`, no auto-injected `registerSW.js`). When a new version is deployed, it installs in the background and a "A new version is available" prompt appears with **Reload** and **Later**. Nothing activates or reloads until the user clicks Reload, so an update never discards in-progress input. If they choose Later, the prompt returns on their next visit. Visitors with no controlling service worker (a first visit) simply get the new version.
 
+### Offline Actions & the API
+Forms with the class `sync-form` that are submitted while offline are saved in IndexedDB (`src/db.ts`) instead of being sent. When the device comes back online they are replayed in order as `POST /api/submit` with a JSON body (`src/sync.ts`), and removed once the server answers with a 2xx status.
+
+**This starter has no backend.** `/api/submit` and `/api/push-subscribe` are placeholders: you need to provide endpoints for them (or change the URLs in `src/sync.ts` and `src/push.ts`). Without a real endpoint every replay fails, as a hosting service typically answers `404`. Push subscriptions fall back to being stored in `localStorage` when the server is unreachable.
+
+A replay that fails (network error or non-2xx response) stays queued and is retried the next time the device comes online. **Each action is tried at most 5 times** (`MAX_SYNC_ATTEMPTS` in `src/sync.ts`); after the fifth failure it is dropped and an error is logged, so a request that can never succeed does not pile up forever. Raise the constant if you want more retries, but note that dropped actions are not recoverable.
+
 ### Security Headers & CSP
 `plugins/security-headers.js` is the single source for the Content Security Policy and related headers. On build it writes a `dist/_headers` file (used by Netlify and Cloudflare Pages), adds the CSP as a `<meta>` fallback to `index.html`, and `npm run preview` serves the same headers. Other hosts need the headers set in their own config (e.g. `vercel.json`, nginx), copied from `_headers`. The meta fallback cannot express `frame-ancestors`.
 
@@ -212,23 +219,40 @@ VITE_VAPID_PUBLIC_KEY=your_vapid_key_here
 ## 🧪 Testing
 
 ### Unit Tests
+Vitest (jsdom) runs the tests in `tests/unit/`.
 ```bash
-npm test                  # Run once
-npm run test:ui          # Interactive UI
-npm run test:coverage    # With coverage report (80% thresholds)
+npm test                  # Watch mode
+npx vitest run            # Run once
+npm run test:ui           # Interactive UI
+npm run test:coverage     # With coverage report
 ```
 
 ### E2E Tests
+Playwright tests in `tests/e2e/` run against the production build, which is built and served with `vite preview` automatically (over plain HTTP; `localhost` is a secure context, so service workers work). `*pwa*.spec.ts` files test the service worker (installs, takes control, works offline) and run only in the "PWA Tests" project; the other specs cover the page, security headers, manifest and site files.
 ```bash
-npm run e2e              # Run all browsers
-npm run e2e:headed      # With browser UI
-npm run e2e:debug       # Debug mode
+npx playwright install chromium   # One-time browser download (add firefox webkit for the other projects)
+npm run e2e                       # All projects
+npx playwright test --project=chromium --project="PWA Tests"   # What CI runs
+npm run e2e:headed                # With browser UI
+npm run e2e:debug                 # Debug mode
+```
+
+### Everything at once
+```bash
+npm run check             # Lint, type-check, unit tests and build
 ```
 
 ### Performance Testing
 ```bash
 npm run lighthouse      # Generate Lighthouse report
 ```
+
+## 🤖 Continuous Integration
+`.github/workflows/ci.yml` runs on pushes to `main` and on pull requests:
+- **check** (Node 22 and 24): lint, type-check, unit tests, build
+- **e2e** (Node 24): Playwright smoke and service worker tests in Chromium; the HTML report is uploaded as an artifact
+
+`.github/dependabot.yml` opens weekly dependency PRs: one grouped PR for minor and patch updates, individual PRs for majors, and one for GitHub Actions updates. TypeScript 7 is ignored until `typescript-eslint` supports it.
 
 ## 📦 Production Deployment
 

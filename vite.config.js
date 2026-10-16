@@ -4,7 +4,10 @@ import { existsSync } from 'node:fs'
 import { siteUrl } from './plugins/site-url.js'
 import { securityHeaders } from './plugins/security-headers.js'
 
-const hasCerts = existsSync('./cert/key.pem') && existsSync('./cert/cert.pem')
+const hasCerts =
+  process.env.NO_HTTPS !== '1' &&
+  existsSync('./cert/key.pem') &&
+  existsSync('./cert/cert.pem')
 
 export default defineConfig({
   publicDir: 'public',

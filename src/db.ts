@@ -6,6 +6,8 @@ export interface OfflineAction {
   type: string;
   data: Record<string, unknown>;
   timestamp: number;
+  // Failed replays so far (see MAX_SYNC_ATTEMPTS in sync.ts)
+  attempts?: number;
 }
 
 let db: IDBPDatabase | null = null;
