@@ -72,6 +72,8 @@
   
   /* Container Max Width */
   --container-max-width: 1200px;
+
+  color-scheme: light dark;
 }
 
 /* Dark Mode Support */
@@ -83,30 +85,6 @@
     --text-primary: var(--text-primary-dark);
     --text-secondary: var(--text-secondary-dark);
     --text-disabled: #cccccc;
-  }
-  
-  .green {
-    color: #a5d6a7;
-    background: color-mix(in srgb, #4caf50 20%, transparent);
-    border-color: color-mix(in srgb, #4caf50 50%, transparent);
-  }
-
-  .red {
-    color: #e57373;
-    background: color-mix(in srgb, #f44336 20%, transparent);
-    border-color: color-mix(in srgb, #f44336 50%, transparent);
-  }
-
-  .orange {
-    color: #ffb74d;
-    background: color-mix(in srgb, #ff9800 20%, transparent);
-    border-color: color-mix(in srgb, #ff9800 50%, transparent);
-  }
-
-  .checking {
-    color: #64b5f6;
-    background: color-mix(in srgb, #2196f3 20%, transparent);
-    border-color: color-mix(in srgb, #2196f3 50%, transparent);
   }
 }
 
@@ -261,7 +239,7 @@ a {
   }
 }
 
-/* Dark mode link styles */
+/* Dark mode: link and status colours (after the base rules they override) */
 @media (prefers-color-scheme: dark) {
   a {
     color: var(--primary-light);
@@ -269,6 +247,30 @@ a {
     &:hover {
       color: #bbdefb;
     }
+  }
+
+  .green {
+    color: #a5d6a7;
+    background: color-mix(in srgb, #4caf50 20%, transparent);
+    border-color: color-mix(in srgb, #4caf50 50%, transparent);
+  }
+
+  .red {
+    color: #e57373;
+    background: color-mix(in srgb, #f44336 20%, transparent);
+    border-color: color-mix(in srgb, #f44336 50%, transparent);
+  }
+
+  .orange {
+    color: #ffb74d;
+    background: color-mix(in srgb, #ff9800 20%, transparent);
+    border-color: color-mix(in srgb, #ff9800 50%, transparent);
+  }
+
+  .checking {
+    color: #64b5f6;
+    background: color-mix(in srgb, #2196f3 20%, transparent);
+    border-color: color-mix(in srgb, #2196f3 50%, transparent);
   }
 }
 
@@ -350,6 +352,16 @@ a {
 }
 
 /* In-app Notifications */
+.in-app-notification,
+.update-prompt {
+  /* These are popovers (top layer): undo the UA centering and box styles */
+  inset: auto;
+  margin: 0;
+  overflow: visible;
+  width: auto;
+  height: auto;
+}
+
 .in-app-notification {
   position: fixed;
   top: var(--spacing-lg);
@@ -433,7 +445,7 @@ a {
 /* Feature Grid */
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: var(--spacing-lg);
   margin: var(--spacing-xl) 0;
 }
@@ -495,6 +507,10 @@ a {
     bottom: var(--spacing-sm);
     left: var(--spacing-sm);
     flex-wrap: wrap;
+
+    & p {
+      flex-basis: 100%;
+    }
   }
 }
 
@@ -580,13 +596,6 @@ a {
   }
 }
 
-/* CSS Container Queries (when supported) */
-@container (max-width: 600px) {
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* View Transitions API Support */
 @view-transition {
   navigation: auto;
@@ -619,8 +628,9 @@ a {
 /* Additional Modern UI Elements */
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: 6px;
   left: 6px;
+  transform: translateY(-200%);
   background: var(--primary-color);
   color: white;
   padding: 8px;
@@ -629,7 +639,7 @@ a {
   border-radius: var(--border-radius-sm);
   
   &:focus {
-    top: 6px;
+    transform: none;
   }
 }
 
@@ -665,57 +675,6 @@ a {
   background: none;
   padding: 0;
   font-size: inherit;
-}
-
-/* Lighthouse Scores Display */
-.lighthouse-scores {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-lg);
-  flex-wrap: wrap;
-  margin: var(--spacing-lg) 0;
-}
-
-.score-item {
-  text-align: center;
-}
-
-.score-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: conic-gradient(var(--success-color) 0deg 360deg, var(--bg-secondary) 360deg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto var(--spacing-sm) auto;
-  position: relative;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    background: var(--bg-primary);
-    border-radius: 50%;
-    z-index: 1;
-  }
-}
-
-.score-number {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--success-color);
-  z-index: 2;
-  position: relative;
-}
-
-.score-label {
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
-  z-index: 2;
-  position: relative;
 }
 
 /* Technical Details Section */
@@ -760,36 +719,14 @@ footer a {
   }
 }
 
-/* Share button positioning */
-.share-button {
-  position: fixed;
-  top: var(--spacing-lg);
-  right: var(--spacing-lg);
-  z-index: 999;
-  
-  @media (max-width: 768px) {
-    top: var(--spacing-sm);
-    right: var(--spacing-sm);
-  }
+/* Share button (in the header, below the subtitle) */
+header {
+  text-align: center;
 }
 
-/* Better responsive behavior for feature cards */
-@media (max-width: 480px) {
-  .lighthouse-scores {
-    gap: var(--spacing-sm);
-  }
-  
-  .score-circle {
-    width: 60px;
-    height: 60px;
-    
-    &::before {
-      width: 45px;
-      height: 45px;
-    }
-  }
-  
-  .score-number {
-    font-size: var(--font-size-base);
-  }
+.share-button {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto var(--spacing-lg);
 }
+

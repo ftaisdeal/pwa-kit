@@ -1,4 +1,14 @@
 import { log } from './logger';
+// Popovers render in the browser's top layer, above everything else, without
+// z-index juggling. Where the Popover API is missing, the element is simply a
+// fixed-position box, so this stays a progressive enhancement.
+function showInTopLayer(element: HTMLElement): void {
+  if (typeof element.showPopover === 'function') {
+    element.setAttribute('popover', 'manual');
+    element.showPopover();
+  }
+}
+
 export function showInAppNotification(title: string, body: string): void {
   const notification = document.createElement('div');
   notification.className = 'in-app-notification';
@@ -7,6 +17,7 @@ export function showInAppNotification(title: string, body: string): void {
   notification.append(heading, document.createElement('br'), body);
 
   document.body.appendChild(notification);
+  showInTopLayer(notification);
 
   setTimeout(() => {
     notification.classList.add('fade-out');
@@ -43,6 +54,7 @@ export function showUpdatePrompt(onReload: () => void): void {
 
   prompt.append(message, reload, later);
   document.body.appendChild(prompt);
+  showInTopLayer(prompt);
   reload.focus();
 }
 

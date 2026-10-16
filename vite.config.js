@@ -47,7 +47,7 @@ export default defineConfig({
       manifest: {
         name: 'PWA Kit Modern',
         short_name: 'PWA Kit',
-        description: 'Modern Progressive Web App starter with advanced features and perfect Lighthouse scores',
+        description: 'Modern Progressive Web App starter with advanced features',
         theme_color: '#1976d2',
         background_color: '#ffffff',
         display: 'standalone',

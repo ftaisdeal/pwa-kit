@@ -42,4 +42,18 @@ describe('showInAppNotification', () => {
     vi.advanceTimersByTime(300);
     expect(document.querySelector('.in-app-notification')).toBeNull();
   });
+
+  it('shows in the top layer when the Popover API is available', () => {
+    const showPopover = vi.fn();
+    HTMLElement.prototype.showPopover = showPopover;
+    try {
+      showInAppNotification('a', 'b');
+      const notification = document.querySelector('.in-app-notification');
+      expect(notification?.getAttribute('popover')).toBe('manual');
+      expect(showPopover).toHaveBeenCalledOnce();
+    } finally {
+      // @ts-expect-error restore jsdom's lack of the Popover API
+      delete HTMLElement.prototype.showPopover;
+    }
+  });
 });

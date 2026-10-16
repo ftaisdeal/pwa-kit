@@ -6,9 +6,11 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#1976d2" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#1976d2" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
   <meta name="description"
-    content="Modern Progressive Web App starter kit with TypeScript, Vite, advanced connectivity detection, service worker caching, and perfect Lighthouse PWA scores." />
+    content="Modern Progressive Web App starter kit with TypeScript, Vite, advanced connectivity detection, service worker caching, and offline support." />
   <meta name="keywords"
     content="PWA, Progressive Web App, TypeScript, Vite, Service Worker, Offline, Mobile, Modern Web" />
   <meta name="author" content="PWA Kit Modern" />
@@ -89,6 +91,9 @@
     <header>
       <h1>PWA Kit Modern</h1>
       <p class="subtitle">Next-generation Progressive Web App starter with TypeScript, Vite & advanced features</p>
+      <button class="share-button button button-primary" type="button" hidden>
+        📤 Share App
+      </button>
     </header>
 
     <section class="status-section" aria-label="Connectivity Status">
@@ -117,7 +122,7 @@
       <div class="feature-card">
         <div class="feature-icon">📱</div>
         <h3>PWA Complete</h3>
-        <p>Perfect Lighthouse scores with advanced caching and offline support</p>
+        <p>Advanced caching and offline support with a service worker and update prompts</p>
       </div>
 
       <div class="feature-card">
@@ -130,7 +135,7 @@
     <section class="overview-section">
       <h2>Overview</h2>
       <p>This modernized PWA starter provides everything needed to build production-ready Progressive Web Apps with
-        perfect Lighthouse scores, advanced caching, offline support, and modern web APIs.</p>
+        advanced caching, offline support, and modern web APIs.</p>
 
       <h3>Quick Start</h3>
       <div class="code-block">
@@ -148,7 +153,7 @@ npm run build</code></pre>
       <ul>
         <li>✅ <strong>HTTPS</strong> - Required for PWA features</li>
         <li>✅ <strong>Modern Browser</strong> - Service Worker support</li>
-        <li>✅ <strong>Node.js 18+</strong> - For development tools</li>
+        <li>✅ <strong>Node.js 22.12+</strong> - For development tools</li>
       </ul>
     </section>
 
@@ -203,46 +208,12 @@ npm run build</code></pre>
       </div>
     </section>
 
-    <section class="performance-section">
-      <h2>Performance & Quality</h2>
-      <div class="lighthouse-scores">
-        <div class="score-item">
-          <div class="score-circle">
-            <span class="score-number">100</span>
-            <span class="score-label">PWA</span>
-          </div>
-        </div>
-        <div class="score-item">
-          <div class="score-circle">
-            <span class="score-number">95+</span>
-            <span class="score-label">Performance</span>
-          </div>
-        </div>
-        <div class="score-item">
-          <div class="score-circle">
-            <span class="score-number">100</span>
-            <span class="score-label">Accessibility</span>
-          </div>
-        </div>
-        <div class="score-item">
-          <div class="score-circle">
-            <span class="score-number">100</span>
-            <span class="score-label">Best Practices</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <footer>
       <p>Built with modern web standards</p>
     </footer>
   </main>
 
-  <!-- Action buttons for testing -->
-  <button class="share-button button button-primary" type="button" hidden>
-    📤 Share App
-  </button>
-
+  <!-- Action buttons -->
   <button class="notifications-button button button-secondary" type="button" hidden>
     🔔 Enable Notifications
   </button>
